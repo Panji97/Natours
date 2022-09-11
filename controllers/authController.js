@@ -19,7 +19,6 @@ exports.signup = catchAsync(async (req, res, next) => {
   });
 
   const token = signToken(newUser._id);
-  console.log(token);
 
   res.status(201).json({
     status: 'success',
