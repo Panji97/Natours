@@ -11,18 +11,10 @@ const filterObj = (obj, ...allowedFields) => {
   return newObj;
 };
 
-exports.getAllUsers = catchAsync(async (req, res) => {
-  const users = await User.find();
-
-  // SEND RESPONSE
-  res.status(200).json({
-    status: 'success',
-    results: users.length,
-    data: {
-      users
-    }
-  });
-});
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
+};
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   // 1. create error is user POSTed password data
@@ -61,8 +53,6 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getUser = Factory.getOne(User);
-
 exports.createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
@@ -70,5 +60,7 @@ exports.createUser = (req, res) => {
   });
 };
 
-exports.updateUser = Factory.updateOne(User);
+exports.getAllUsers = Factory.getAll(User);
+exports.getUser = Factory.getOne(User);
+exports.updateUser = Factory.updateOne(User); //=======> do NOT update with this!
 exports.deleteUser = Factory.deleteOne(User);
