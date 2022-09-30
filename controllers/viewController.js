@@ -22,8 +22,6 @@ exports.getTour = catchAsync(async (req, res, next) => {
     fields: 'review rating user'
   });
 
-  console.log(tour);
-
   if (!tour) {
     return next(new AppError('There is no tour with that name.', 404));
   }
@@ -42,9 +40,12 @@ exports.getLoginForm = (req, res) => {
   });
 };
 
-exports.getAccount = (req, res) => {
+exports.getAccount = async (req, res) => {
+  const tour = await Tour.find();
+
   res.status(200).render('account', {
-    title: 'Your account'
+    title: 'Your account',
+    tour
   });
 };
 
