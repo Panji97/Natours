@@ -6,18 +6,6 @@ const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/AppError');
 const Factory = require('./handleFactory');
 
-// const multerStorage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, 'public/img/users');
-//   },
-//   filename: function(req, file, cb) {
-//     // const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-//     // cb(null, file.fieldname + '-' + uniqueSuffix);
-//     const ext = file.mimetype.split('/')[1];
-//     cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
-//   }
-// });
-
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
@@ -37,7 +25,7 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
 
   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
 
-  sharp(req.file.buffer)
+  await sharp(req.file.buffer)
     .resize(500, 500)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
